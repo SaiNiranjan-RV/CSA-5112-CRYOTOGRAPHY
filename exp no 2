@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main()
+{
+    char plaintext[1000], ciphertext[1000];
+    char key[27];
+    int i;
+
+    // Cipher alphabet
+    printf("Enter 26-letter substitution key: ");
+    scanf("%26s", key);
+
+    // Check that key contains 26 unique letters
+    if (strlen(key) != 26) {
+        printf("Invalid key! Key must contain 26 letters.\n");
+        return 1;
+    }
+
+    for (i = 0; i < 26; i++) {
+        key[i] = toupper(key[i]);
+
+        if (key[i] < 'A' || key[i] > 'Z') {
+            printf("Invalid key! Use only alphabets.\n");
+            return 1;
+        }
+
+        for (int j = i + 1; j < 26; j++) {
+            if (key[i] == toupper(key[j])) {
+                printf("Invalid key! Letters must be unique.\n");
+                return 1;
+            }
+        }
+    }
+
+    // Clear input buffer
+    getchar();
+
+    printf("Enter plaintext: ");
+    fgets(plaintext, sizeof(plaintext), stdin);
+
+    // Encryption
+    for (i = 0; plaintext[i] != '\0'; i++) {
+        if (plaintext[i] >= 'A' && plaintext[i] <= 'Z') {
+            ciphertext[i] = key[plaintext[i] - 'A'];
+        }
+        else if (plaintext[i] >= 'a' && plaintext[i] <= 'z') {
+            ciphertext[i] = tolower(key[plaintext[i] - 'a']);
+        }
+        else {
+            ciphertext[i] = plaintext[i];
+        }
+    }
+
+    ciphertext[i] = '\0';
+
+    printf("Ciphertext: %s", ciphertext);
+
+    return 0;
+}
